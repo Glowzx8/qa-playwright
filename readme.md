@@ -1,33 +1,47 @@
-# 🧪 QA Automation Strategy — CURA Healthcare
+# 🧪 Stratégie d’automatisation QA — CURA Healthcare
 
 ## 🎯 Objectif du projet
 
-Ce projet a pour but de démontrer une **stratégie de tests automatisés réaliste et maintenable** autour de la feature **“Prise de rendez-vous”** de l’application CURA Healthcare, en utilisant **Playwright**.
+Ce projet a pour objectif de démontrer une **stratégie réaliste et maintenable de tests automatisés** autour de la fonctionnalité **de prise de rendez-vous** de l’application CURA Healthcare, en utilisant **Playwright**.
 
 L’objectif n’est pas uniquement de faire “passer des tests”, mais de :
 
-* représenter fidèlement les **risques utilisateur**
-* garantir une **non-régression rapide et fiable**
-* maintenir une suite **lisible, explicable et industrialisable**
+* couvrir les **parcours utilisateurs critiques**
+* sécuriser la **non-régression fonctionnelle**
+* maintenir une suite de tests **lisible, expliquable et industrialisable**
 
 ---
 
-## 🧠 Principes clés de la stratégie
+## 🌐 Application testée
 
-### 1️⃣ Séparation claire des responsabilités
+Ce projet s’appuie sur l’application de démonstration publique **CURA Healthcare Service**, utilisée à des fins pédagogiques et d’illustration.
 
-* Les **Page Objects** encapsulent :
+🔗 [https://katalon-demo-cura.herokuapp.com/](https://katalon-demo-cura.herokuapp.com/)
+
+Cette application permet de tester des scénarios réalistes de réservation de rendez-vous, incluant :
+
+* authentification
+* formulaires avec validation
+* confirmations de parcours utilisateur
+
+---
+
+## 🧠 Principes clés de la stratégie QA
+
+### 1️⃣ Séparation des responsabilités
+
+* Les **Page Objects** centralisent :
 
   * les sélecteurs
   * les actions utilisateur
-  * la synchronisation technique
-* Les **tests** définissent :
+  * la logique technique commune
+* Les **tests** portent exclusivement :
 
   * l’intention métier
   * les assertions
   * le niveau de réalisme attendu
 
-👉 Aucun `expect` n’est utilisé dans les Page Objects.
+Aucune assertion (`expect`) n’est utilisée dans les Page Objects.
 
 ---
 
@@ -37,17 +51,15 @@ L’objectif n’est pas uniquement de faire “passer des tests”, mais de :
 
 Objectif :
 
-* vérifier que **l’utilisateur final peut réellement utiliser la fonctionnalité**
-* détecter toute régression UX critique
+* vérifier que les **parcours utilisateurs critiques fonctionnent réellement**
+* détecter toute régression UX bloquante
 
 Caractéristiques :
 
-* interactions réelles (clics, validations navigateur)
+* interactions proches du comportement réel (clics, validations navigateur)
 * peu nombreux
-* plus lents et plus fragiles
-* mais **irremplaçables**
-
-Ces tests utilisent une **soumission avec validation utilisateur réelle**.
+* plus sensibles aux changements UI
+* rôle de **tests sentinelles**
 
 ---
 
@@ -55,47 +67,30 @@ Ces tests utilisent une **soumission avec validation utilisateur réelle**.
 
 Objectif :
 
-* garantir que la **logique métier fonctionne toujours**
+* sécuriser la **logique fonctionnelle**
 * accélérer la détection de régressions
 
 Caractéristiques :
 
-* soumission technique (bypass de la validation UI)
-* rapides et stables
-* forte couverture fonctionnelle
-* adaptés à la CI
+* soumission technique du formulaire
+* plus rapides et plus stables
+* adaptés à une exécution fréquente en CI
 
-Ces tests **ne remplacent pas** les tests utilisateur : ils les complètent.
+Ces tests ne remplacent pas les tests utilisateur, ils les complètent.
 
 ---
 
-### 3️⃣ Distinction volontaire entre soumission utilisateur et technique
+### 3️⃣ Distinction volontaire des modes de soumission
 
 La stratégie distingue volontairement :
 
-* la **soumission utilisateur réelle** (clic + validation HTML/JS)
-* la **soumission technique** (envoi direct du formulaire)
+* la soumission **utilisateur réelle** (respect de la validation UI)
+* la soumission **technique** (contournement contrôlé de l’UI)
 
-Cette séparation permet :
+Cette approche permet :
 
-* d’éviter les faux positifs
 * de ne pas masquer des régressions UX
-* tout en conservant une suite rapide et fiable
-
----
-
-### 4️⃣ Gestion des composants UI complexes
-
-Certains composants (ex. datepicker) :
-
-* affichent un format utilisateur
-* mais attendent un format technique différent
-* ou nécessitent des gestes utilisateur réels
-
-La stratégie accepte que :
-
-* les tests utilisateur soient plus exigeants
-* les tests techniques contournent volontairement l’UI lorsque l’objectif est la logique métier
+* tout en conservant une suite de tests fiable et rapide
 
 ---
 
@@ -104,34 +99,49 @@ La stratégie accepte que :
 ```
 pages/          → Page Objects (logique partagée)
 tests/
- ├─ e2e/        → tests utilisateur réels (sentinelles UX)
- ├─ regression/ → non-régression rapide et stable
+ ├─ e2e/        → tests utilisateur réels
+ ├─ regression/ → tests de non-régression
  └─ exploratory/→ tests exploratoires / canaris
 ```
 
-Cette organisation privilégie **l’intention de test** plutôt que la technologie.
+Cette organisation privilégie l’intention de test plutôt que la technologie.
 
 ---
 
 ## 🏷️ Tags utilisés
 
-| Tag            | Rôle                      |
-| -------------- | ------------------------- |
-| `@user`        | Tests centrés utilisateur |
-| `@e2e`         | Scénarios critiques       |
-| `@regression`  | Non-régression rapide     |
-| `@tech`        | Tests techniques          |
-| `@exploratory` | Couverture large          |
+| Tag            | Description                |
+| -------------- | -------------------------- |
+| `@user`        | Tests orientés utilisateur |
+| `@e2e`         | Parcours critiques         |
+| `@regression`  | Non-régression rapide      |
+| `@tech`        | Tests techniques           |
+| `@exploratory` | Tests exploratoires        |
 
 ---
 
-## ▶️ Lancer les tests
+## 🔄 Intégration continue (CI)
+
+Le projet est intégré à **GitHub Actions** avec une stratégie volontairement simple et lisible :
+
+* **Pull Request** : exécution des tests de régression rapide
+* **Branche principale (`main`)** : exécution de la suite complète
+
+Cette approche permet de concilier :
+
+* rapidité de feedback
+* couverture fonctionnelle
+* simplicité de maintenance
+
+---
+
+## ▶️ Lancer les tests localement
 
 ```bash
-# Tests utilisateur critiques
+# Tests utilisateur
 npx playwright test --grep @user
 
-# Régression rapide
+# Tests de régression
 npx playwright test --grep @regression
 
 # Suite complète
@@ -140,28 +150,14 @@ npx playwright test
 
 ---
 
-## 🧩 Philosophie générale
-
-Cette suite de tests repose sur un principe simple :
-
-> **Tous les tests ne doivent pas avoir le même niveau de réalisme.**
-> La qualité vient de la combinaison intelligente de tests réalistes et de tests robustes.
-
-Cette approche permet :
-
-* une meilleure détection des risques réels
-* une maintenance plus simple
-* une meilleure lisibilité en équipe
-* une intégration CI efficace
-
----
-
 ## 📌 Conclusion
 
-Ce projet illustre une approche **pragmatique et professionnelle** de l’automatisation QA :
+Ce projet illustre une approche pragmatique de l’automatisation QA :
 
 * orientée produit
-* consciente des limites de l’UI automation
-* adaptée aux contraintes réelles des équipes
+* consciente des limites de l’automatisation UI
+* adaptée à un contexte réel d’équipe
 
+L’objectif est de démontrer une capacité à **raisonner stratégie de test**, et pas uniquement à écrire des scripts automatisés.
 
+---

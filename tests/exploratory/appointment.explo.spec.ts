@@ -1,12 +1,8 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../../pages/LoginPage';
-import { AppointmentPage } from '../../pages/AppointmentPage';
+import { test, expect } from '../fixtures/pages';
 
 test.describe('@exploratory Appointment', () => {
 
-  test('exploratory submit variations', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const appointmentPage = new AppointmentPage(page);
+  test('exploratory submit variations', async ({ loginPage, appointmentPage, page }) => {
 
     await loginPage.goto();
     await loginPage.openLogin();
@@ -16,9 +12,10 @@ test.describe('@exploratory Appointment', () => {
       facility: 'Tokyo CURA Healthcare Center',
       readmission: false,
       program: 'None',
-      date: '2026-12-30',
       comment: 'Exploratory test'
     });
+
+    await appointmentPage.pickDateAsUser('2026-08-30');
 
     await appointmentPage.submitForced();
 

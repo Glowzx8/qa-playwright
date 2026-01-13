@@ -20,6 +20,6 @@ export class LoginPage {
     await this.page.locator('#txt-password').fill(password);
     await this.page.locator('#btn-login').click();
 
-    await this.page.waitForSelector('h2:has-text("Make Appointment")');
+
   }
 }

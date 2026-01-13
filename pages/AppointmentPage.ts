@@ -44,7 +44,11 @@ export class AppointmentPage {
   }
 
   async submitForced() {
-    await this.page.locator('form').evaluate(form => form.submit());
-  }
+
+    await this.page.locator('form').evaluate(form => {
+      (form as HTMLFormElement).submit();
+    });
+    
+}
 }
 

@@ -116,12 +116,19 @@ Certaines implémentations tiennent compte de **spécificités du site CURA** af
 ## 📁 Organisation du projet
 
 pages/ → Page Objects (logique métier et interactions UI)
+
 tests/
+
 ├─ e2e/ → Tests utilisateur réels (parcours critiques)
+
 ├─ regression/ → Tests de non-régression fonctionnelle
+
 ├─ exploratory/ → Tests exploratoires / canaris
+
 ├─ fixtures/ → Fixtures Playwright (contexte de test, authentification)
+
 └─ helpers/ → Données et helpers spécifiques aux tests
+
 
 Cette organisation privilégie l’intention de test et la séparation des responsabilités
 plutôt que la technologie ou le framework.

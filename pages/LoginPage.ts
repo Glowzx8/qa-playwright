@@ -1,14 +1,10 @@
 import { Page } from '@playwright/test';
 
 export class LoginPage {
-  readonly page: Page;
-
-  constructor(page: Page) {
-    this.page = page;
-  }
+  constructor(private page: Page) { }
 
   async goto() {
-    await this.page.goto('https://katalon-demo-cura.herokuapp.com/');
+    await this.page.goto('/');
   }
 
   async openLogin() {
@@ -16,10 +12,8 @@ export class LoginPage {
   }
 
   async login(username: string, password: string) {
-    await this.page.locator('#txt-username').fill(username);
-    await this.page.locator('#txt-password').fill(password);
-    await this.page.locator('#btn-login').click();
-
-
+    await this.page.getByLabel('Username').fill(username);
+    await this.page.getByLabel('Password').fill(password);
+    await this.page.getByRole('button', { name: 'Login' }).click();
   }
 }

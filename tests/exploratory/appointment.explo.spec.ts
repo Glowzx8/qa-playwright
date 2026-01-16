@@ -1,25 +1,28 @@
-import { test, expect } from '../fixtures/pages';
+import { test, expect } from '../fixtures/pages.fixture';
 
-test.describe('@exploratory Appointment', () => {
+test.describe('@exploratory Appointment form exploration', () => {
 
-  test('exploratory submit variations', async ({ loginPage, appointmentPage, page }) => {
+  test('facility selector accepts all available values', async ({ page }) => {
+    await page.goto('/#appointment');
 
-    await loginPage.goto();
-    await loginPage.openLogin();
-    await loginPage.login('John Doe', 'ThisIsNotAPassword');
+    const facilities = [
+      'Tokyo CURA Healthcare Center',
+      'Hongkong CURA Healthcare Center',
+      'Seoul CURA Healthcare Center',
+    ];
 
-    await appointmentPage.fillForm({
-      facility: 'Tokyo CURA Healthcare Center',
-      readmission: false,
-      program: 'None',
-      comment: 'Exploratory test'
-    });
+    for (const facility of facilities) {
+      await page.selectOption('#combo_facility', { label: facility });
+      await expect(page.locator('#combo_facility')).toHaveValue(facility);
+    }
+  });
 
-    await appointmentPage.pickDateAsUser('2026-08-30');
+  test('appointment cannot be submitted without required fields', async ({ page }) => {
+    await page.goto('/#appointment');
 
-    await appointmentPage.submitForced();
+    await page.click('#btn-book-appointment');
 
-    await expect(page.locator('body')).toBeVisible();
+    await expect(page.locator('h2')).toHaveText('Make Appointment');
   });
 
 });

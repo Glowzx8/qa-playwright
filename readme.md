@@ -1,5 +1,7 @@
 # 🧪 Stratégie d’automatisation QA — CURA Healthcare
 
+> Projet d’automatisation QA avec Playwright illustrant une stratégie réaliste de tests E2E, de régression et exploratoires sur l’application CURA Healthcare.
+
 ## 🎯 Objectif du projet
 
 Ce projet a pour objectif de démontrer une **stratégie réaliste et maintenable de tests automatisés** autour de la fonctionnalité **de prise de rendez-vous** de l’application CURA Healthcare, en utilisant **Playwright**.
@@ -10,13 +12,15 @@ L’objectif n’est pas uniquement de faire “passer des tests”, mais de :
 * sécuriser la **non-régression fonctionnelle**
 * maintenir une suite de tests **lisible, expliquable et industrialisable**
 
+Ce projet est conçu comme un **exemple de stratégie QA junior / début mid**, orientée lisibilité, maintenabilité et raisonnement produit.
+
 ---
 
 ## 🌐 Application testée
 
 Ce projet s’appuie sur l’application de démonstration publique **CURA Healthcare Service**, utilisée à des fins pédagogiques et d’illustration.
 
-🔗 [https://katalon-demo-cura.herokuapp.com/](https://katalon-demo-cura.herokuapp.com/)
+🔗 https://katalon-demo-cura.herokuapp.com/
 
 Cette application permet de tester des scénarios réalistes de réservation de rendez-vous, incluant :
 
@@ -31,21 +35,19 @@ Cette application permet de tester des scénarios réalistes de réservation de 
 ### 1️⃣ Séparation des responsabilités
 
 * Les **Page Objects** centralisent :
-
   * les sélecteurs
   * les actions utilisateur
   * la logique technique commune
 * Les **tests** portent exclusivement :
-
   * l’intention métier
   * les assertions
   * le niveau de réalisme attendu
 
-Aucune assertion (`expect`) n’est utilisée dans les Page Objects.
+Aucune assertion n’est utilisée dans les Page Objects.
 
 ---
 
-### 2️⃣ Deux niveaux de tests complémentaires
+### 2️⃣ Niveaux de tests complémentaires
 
 #### 🟢 Tests E2E utilisateur réel (`@e2e @user`)
 
@@ -56,7 +58,7 @@ Objectif :
 
 Caractéristiques :
 
-* interactions proches du comportement réel (clics, validations navigateur)
+* interactions proches du comportement réel
 * peu nombreux
 * plus sensibles aux changements UI
 * rôle de **tests sentinelles**
@@ -72,11 +74,26 @@ Objectif :
 
 Caractéristiques :
 
-* soumission technique du formulaire
+* interactions techniques contrôlées
 * plus rapides et plus stables
 * adaptés à une exécution fréquente en CI
 
 Ces tests ne remplacent pas les tests utilisateur, ils les complètent.
+
+---
+
+#### 🟠 Tests exploratoires (`@exploratory`)
+
+Objectif :
+
+* explorer le comportement du système
+* détecter des effets de bord ou incohérences
+
+Caractéristiques :
+
+* périmètre volontairement ciblé
+* assertions limitées
+* rôle de **canaris** plutôt que de couverture exhaustive
 
 ---
 
@@ -92,26 +109,29 @@ Cette approche permet :
 * de ne pas masquer des régressions UX
 * tout en conservant une suite de tests fiable et rapide
 
+Certaines implémentations tiennent compte de **spécificités du site CURA** afin d’éviter des faux positifs ou des tests artificiellement stables.
+
 ---
 
 ## 📁 Organisation du projet
 
-```
-pages/          → Page Objects (logique partagée)
+pages/ → Page Objects (logique métier et interactions UI)
 tests/
- ├─ e2e/        → tests utilisateur réels
- ├─ regression/ → tests de non-régression
- └─ exploratory/→ tests exploratoires / canaris
-```
+├─ e2e/ → Tests utilisateur réels (parcours critiques)
+├─ regression/ → Tests de non-régression fonctionnelle
+├─ exploratory/ → Tests exploratoires / canaris
+├─ fixtures/ → Fixtures Playwright (contexte de test, authentification)
+└─ helpers/ → Données et helpers spécifiques aux tests
 
-Cette organisation privilégie l’intention de test plutôt que la technologie.
+Cette organisation privilégie l’intention de test et la séparation des responsabilités
+plutôt que la technologie ou le framework.
 
 ---
 
 ## 🏷️ Tags utilisés
 
 | Tag            | Description                |
-| -------------- | -------------------------- |
+|----------------|----------------------------|
 | `@user`        | Tests orientés utilisateur |
 | `@e2e`         | Parcours critiques         |
 | `@regression`  | Non-régression rapide      |
@@ -146,18 +166,3 @@ npx playwright test --grep @regression
 
 # Suite complète
 npx playwright test
-```
-
----
-
-## 📌 Conclusion
-
-Ce projet illustre une approche pragmatique de l’automatisation QA :
-
-* orientée produit
-* consciente des limites de l’automatisation UI
-* adaptée à un contexte réel d’équipe
-
-L’objectif est de démontrer une capacité à **raisonner stratégie de test**, et pas uniquement à écrire des scripts automatisés.
-
----

@@ -1,54 +1,68 @@
 import { Page } from '@playwright/test';
 
+export type AppointmentData = {
+  facility: string;
+  readmission: boolean;
+  program: 'Medicare' | 'Medicaid' | 'None';
+  comment?: string;
+};
+
 export class AppointmentPage {
-  readonly page: Page;
+  constructor(private readonly page: Page) { }
 
-  constructor(page: Page) {
-    this.page = page;
-  }
+  async fillForm(data: AppointmentData) {
+    await this.page
+      .locator('#combo_facility')
+      .selectOption({ label: data.facility });
 
-  async fillForm(options: {
-    facility: string;
-    readmission: boolean;
-    program: 'Medicare' | 'Medicaid' | 'None';
-    comment?: string;
-  }) {
-    await this.page.locator('#combo_facility').selectOption({ label: options.facility });
-
-    if (options.readmission) {
+    if (data.readmission) {
       await this.page.locator('#chk_hospotal_readmission').check();
     }
 
-    if (options.program === 'Medicare') {
-      await this.page.locator('#radio_program_medicare').check();
-    } else if (options.program === 'Medicaid') {
-      await this.page.locator('#radio_program_medicaid').check();
-    } else {
-      await this.page.locator('#radio_program_none').check();
+    switch (data.program) {
+      case 'Medicare':
+        await this.page.locator('#radio_program_medicare').check();
+        break;
+      case 'Medicaid':
+        await this.page.locator('#radio_program_medicaid').check();
+        break;
+      case 'None':
+        await this.page.locator('#radio_program_none').check();
+        break;
     }
 
-    if (options.comment) {
-      await this.page.locator('#txt_comment').fill(options.comment);
+    if (data.comment) {
+      await this.page.locator('#txt_comment').fill(data.comment);
     }
-  } // ✅ FIN DE fillForm
+  }
 
+  /**
+   * CURA-specific: date must be typed like a real user
+   */
   async pickDateAsUser(date: string) {
     const dateInput = this.page.locator('#txt_visit_date');
+
     await dateInput.click();
     await dateInput.pressSequentially(date);
     await dateInput.press('Tab');
   }
 
+  /**
+   * Standard user submission
+   */
   async submitWithValidation() {
-    await this.page.locator('#btn-book-appointment').click();
+    await Promise.all([
+      this.page.waitForURL(/#summary/),
+      this.page.locator('#btn-book-appointment').click(),
+    ]);
   }
 
+  /**
+   * Technical / edge-case submission (bypass client validation)
+   */
   async submitForced() {
-
     await this.page.locator('form').evaluate(form => {
       (form as HTMLFormElement).submit();
     });
-    
+  }
 }
-}
-

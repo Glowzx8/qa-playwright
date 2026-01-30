@@ -8,7 +8,7 @@ import { appointmentData, curaDatePlus } from '../helpers/appointmentData';
 
 const dateCases = [
     { name: 'J-1', offset: -1 },
-    { name: 'J', offset: 0 },
+    { name: 'JJ', offset: 0 },
     { name: 'J+1', offset: 1 },
     { name: 'J+365', offset: 365 },
 ];

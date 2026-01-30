@@ -1,8 +1,11 @@
-import { Page } from '@playwright/test';
-import { test as base } from './auth.fixture';
+import { test as base, expect, type Page } from '@playwright/test';
 import { LoginPage } from '../../pages/LoginPage';
 import { AppointmentPage } from '../../pages/AppointmentPage';
 
+/**
+ * Fixtures Playwright — Page Objects “bruts” (sans login).
+ * Utilisé pour les tests d’authent (positif/négatif) ou les scénarios qui démarrent avant la connexion.
+ */
 
 type PagesFixtures = {
   loginPage: LoginPage;
@@ -10,13 +13,17 @@ type PagesFixtures = {
 };
 
 export const test = base.extend<PagesFixtures>({
+  // Fournit un LoginPage (POM) lié à la page Playwright.
   loginPage: async ({ page }: { page: Page }, use) => {
     await use(new LoginPage(page));
   },
 
-  appointmentPage: async ({ page }: { page: Page }, use) => {
+  // Fournit un AppointmentPage (POM) lié à la page Playwright.
+  appointmentPage: async ({ page }, use) => {
     await use(new AppointmentPage(page));
   },
 });
 
-export { expect } from '@playwright/test';
+// Re-export utilitaire
+export { expect };
+export type { Page };

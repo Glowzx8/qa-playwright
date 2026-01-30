@@ -1,175 +1,56 @@
-# 🧪 Stratégie d’automatisation QA — CURA Healthcare
-
-> Projet d’automatisation QA avec Playwright illustrant une stratégie réaliste de tests E2E, de régression et exploratoires sur l’application CURA Healthcare.
-
-## 🎯 Objectif du projet
-
-Ce projet a pour objectif de démontrer une **stratégie réaliste et maintenable de tests automatisés** autour de la fonctionnalité **de prise de rendez-vous** de l’application CURA Healthcare, en utilisant **Playwright**.
-
-L’objectif n’est pas uniquement de faire “passer des tests”, mais de :
-
-* couvrir les **parcours utilisateurs critiques**
-* sécuriser la **non-régression fonctionnelle**
-* maintenir une suite de tests **lisible, expliquable et industrialisable**
-
-Ce projet est conçu comme un **exemple de stratégie QA junior / début mid**, orientée lisibilité, maintenabilité et raisonnement produit.
-
----
-
-## 🌐 Application testée
-
-Ce projet s’appuie sur l’application de démonstration publique **CURA Healthcare Service**, utilisée à des fins pédagogiques et d’illustration.
-
-🔗 https://katalon-demo-cura.herokuapp.com/
-
-Cette application permet de tester des scénarios réalistes de réservation de rendez-vous, incluant :
-
-* authentification
-* formulaires avec validation
-* confirmations de parcours utilisateur
-
----
-
-## 🧠 Principes clés de la stratégie QA
-
-### 1️⃣ Séparation des responsabilités
-
-* Les **Page Objects** centralisent :
-  * les sélecteurs
-  * les actions utilisateur
-  * la logique technique commune
-* Les **tests** portent exclusivement :
-  * l’intention métier
-  * les assertions
-  * le niveau de réalisme attendu
-
-Aucune assertion n’est utilisée dans les Page Objects.
-
----
-
-### 2️⃣ Niveaux de tests complémentaires
-
-#### 🟢 Tests E2E utilisateur réel (`@e2e @user`)
-
-Objectif :
-
-* vérifier que les **parcours utilisateurs critiques fonctionnent réellement**
-* détecter toute régression UX bloquante
-
-Caractéristiques :
-
-* interactions proches du comportement réel
-* peu nombreux
-* plus sensibles aux changements UI
-* rôle de **tests sentinelles**
-
----
-
-#### 🔵 Tests de régression technique (`@regression @tech`)
-
-Objectif :
-
-* sécuriser la **logique fonctionnelle**
-* accélérer la détection de régressions
-
-Caractéristiques :
-
-* interactions techniques contrôlées
-* plus rapides et plus stables
-* adaptés à une exécution fréquente en CI
-
-Ces tests ne remplacent pas les tests utilisateur, ils les complètent.
-
----
-
-#### 🟠 Tests exploratoires (`@exploratory`)
-
-Objectif :
-
-* explorer le comportement du système
-* détecter des effets de bord ou incohérences
-
-Caractéristiques :
-
-* périmètre volontairement ciblé
-* assertions limitées
-* rôle de **canaris** plutôt que de couverture exhaustive
-
----
-
-### 3️⃣ Distinction volontaire des modes de soumission
-
-La stratégie distingue volontairement :
-
-* la soumission **utilisateur réelle** (respect de la validation UI)
-* la soumission **technique** (contournement contrôlé de l’UI)
-
-Cette approche permet :
-
-* de ne pas masquer des régressions UX
-* tout en conservant une suite de tests fiable et rapide
-
-Certaines implémentations tiennent compte de **spécificités du site CURA** afin d’éviter des faux positifs ou des tests artificiellement stables.
-
----
-
-## 📁 Organisation du projet
-
-pages/ → Page Objects (logique métier et interactions UI)
-
-tests/
-
-├─ e2e/ → Tests utilisateur réels (parcours critiques)
-
-├─ regression/ → Tests de non-régression fonctionnelle
-
-├─ exploratory/ → Tests exploratoires / canaris
-
-├─ fixtures/ → Fixtures Playwright (contexte de test, authentification)
-
-└─ helpers/ → Données et helpers spécifiques aux tests
-
-
-Cette organisation privilégie l’intention de test et la séparation des responsabilités
-plutôt que la technologie ou le framework.
-
----
-
-## 🏷️ Tags utilisés
-
-| Tag            | Description                |
-|----------------|----------------------------|
-| `@user`        | Tests orientés utilisateur |
-| `@e2e`         | Parcours critiques         |
-| `@regression`  | Non-régression rapide      |
-| `@tech`        | Tests techniques           |
-| `@exploratory` | Tests exploratoires        |
-
----
-
-## 🔄 Intégration continue (CI)
-
-Le projet est intégré à **GitHub Actions** avec une stratégie volontairement simple et lisible :
-
-* **Pull Request** : exécution des tests de régression rapide
-* **Branche principale (`main`)** : exécution de la suite complète
-
-Cette approche permet de concilier :
-
-* rapidité de feedback
-* couverture fonctionnelle
-* simplicité de maintenance
-
----
-
-## ▶️ Lancer les tests localement
-
+# QA Playwright — CURA Healthcare (projet de démonstration)
+
+En reconversion professionnelle vers le métier de QA/testeur logiciel (formation ENI Nantes), ce dépôt est mon projet « vitrine » pour m'exercer sur Playwright et TypeScript sur une application de démonstration (CURA Healthcare).
+
+Le but n'était pas d'accumuler les tests, mais de présenter mon approche dans l'automatisation : couvrir les parcours importants, rédiger des tests clairs, et disposer d'une CI simple.
+
+## Mon objectif
+- Une méthode axée sur le parcours utilisateur et la non-régression
+- Des tests qui sont faciles à lire et à maintenir (POM + fixtures)
+- Un système d'intégration continue basé sur GitHub Actions (CI).
+
+## Ce qui est testé (exemples)
+- Parcours principal : prise de rendez-vous “cas nominal” (données valides)
+- Cas négatifs : champs obligatoires / validations (ex: date manquante) / mauvais identifiants
+- Quelques tests “smoke” pour vérifier que l’appli est opérationnelle
+
+> Je privilégie la qualité des scénarios et la clarté du test plutôt que la quantité.
+
+## Structure du projet
+- `pages/` : Page Objects (interactions réutilisables)
+- `tests/`
+  - `regression/` : tests de non-régression (cas aux limites + authentification)
+  - `smoke/` : tests rapides
+- `tests/fixtures/` : fixtures Playwright (pages prêtes à l’emploi, user connecté / user non connecté)
+- `tests/helpers/` : données / helpers pour garder les tests simples à lire
+
+## Quelques choix techniques
+- **POM (Page Object Model)** : les actions de page (login, remplir le formulaire, soumettre) sont centralisées dans des classes → les tests restent lisibles.
+- **Fixtures Playwright** : je prépare ce dont les tests ont besoin (pages prêtes, user déjà connecté si nécessaire) → moins de duplication.
+- **GitHub Actions (CI)** : les tests tournent automatiquement à chaque push/PR → feedback rapide.
+
+## Lancer le projet
+Installation :
 ```bash
-# Tests utilisateur
-npx playwright test --grep @user
-
-# Tests de régression
-npx playwright test --grep @regression
-
-# Suite complète
+npm install
+npx playwright install
+```
+Lancer les tests :
+```bash
 npx playwright test
+```
+Report HTML :   
+```bash
+npx playwright show-report
+```
+
+## Notes (site de démo)
+CURA Healthcare est une application de démonstration : certaines règles métier ne sont pas forcément implémentées.
+Exemple : l'entrée d'une date antérieure (J-1) est acceptée.  
+Dans ce repo, les tests vérifient surtout la cohérence du parcours.
+
+## Évolution
+Suite à des retours de QA expérimenté(e) :
+- J’ai utilisé des fixtures pour rendre les tests plus lisibles et éviter la duplication ;
+- J’ai renforcé la couverture avec davantage de cas négatifs et de cas aux limites (authentification, validations, dates).
+

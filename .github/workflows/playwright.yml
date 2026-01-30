@@ -6,32 +6,39 @@ on:
     branches: [ main ]
 
 jobs:
-  regression:
-    name: Regression tests
+  tests:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    timeout-minutes: 15
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+          cache: npm
 
-      - run: npm ci
-      - run: npx playwright install --with-deps
-      - run: npx playwright test --grep @regression
+      - name: Install dependencies
+        run: npm ci
 
-  full:
-    name: Full test suite
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    steps:
-      - uses: actions/checkout@v4
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
 
-      - uses: actions/setup-node@v4
+      # Pull Request => smoke 
+      - name: Run smoke tests (PR)
+        if: github.event_name == 'pull_request'
+        run: npx playwright test --grep "@smoke" --project=chromium
+
+      # main => regression
+      - name: Run regression tests (main)
+        if: github.event_name == 'push'
+        run: npx playwright test --grep "@regression"
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          node-version: 18
-
-      - run: npm ci
-      - run: npx playwright install --with-deps
-      - run: npx playwright test
+          name: playwright-report
+          path: playwright-report

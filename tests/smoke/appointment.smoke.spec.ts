@@ -1,10 +1,16 @@
-import { test, expect } from '../fixtures/pages.fixture';
+import { test, expect } from '../fixtures/authenticated.fixture';
 
-test.describe('@exploratory Appointment form exploration', () => {
+/**
+ * SMOKE — Tests rapides “canary” autour du formulaire de RDV.
+ * Objectif : détecter très tôt si l'écran principal est cassé (sélecteur, validation requise...).
+ */
+
+test.describe('@smoke Appointment form exploration', () => {
 
   test('facility selector accepts all available values', async ({ page }) => {
     await page.goto('/#appointment');
 
+    // Valeurs présentes dans le select “Facility”
     const facilities = [
       'Tokyo CURA Healthcare Center',
       'Hongkong CURA Healthcare Center',

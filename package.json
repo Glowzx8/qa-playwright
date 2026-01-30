@@ -8,7 +8,6 @@
     "test:headed": "playwright test --headed",
     "test:chromium": "playwright test --project=chromium",
     "report": "playwright show-report",
-    "test:e2e": "playwright test -g \"@e2e\"",
     "test:regression": "playwright test -g \"@regression\""
   },
   "keywords": [],
@@ -16,7 +15,6 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@faker-js/faker": "^10.2.0",
     "@playwright/test": "^1.57.0",
     "@types/node": "^25.0.3"
   }

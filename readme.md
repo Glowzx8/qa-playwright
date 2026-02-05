@@ -50,8 +50,9 @@ Exemple : l'entrée d'une date antérieure (J-1) est acceptée.
 Dans ce repo, les tests vérifient surtout la cohérence du parcours.
 
 ## Évolution
+J’ai stabilisé les tests sur Firefox : j’ai ajouté des attentes claires (élément visible/cliquable, page de confirmation) et activé les traces sur le premier retry pour comprendre les échecs en CI.
+
 Suite à des retours de QA expérimenté(e) :
-- J’ai stabilisé les tests sur Firefox : j’ai ajouté des attentes claires (élément visible/cliquable, page de confirmation) et activé les traces sur le premier retry pour comprendre les échecs en CI.
 - J’ai utilisé des fixtures pour rendre les tests plus lisibles et éviter la duplication ;
 - J’ai renforcé la couverture avec davantage de cas négatifs et de cas aux limites (authentification, validations, dates).
 

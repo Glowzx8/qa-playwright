@@ -2,8 +2,8 @@ import type { AppointmentData } from '../../pages/AppointmentPage';
 
 /**
  * Helpers de données pour les tests.
- * - appointmentData.valid() : jeu de données “cas nominal” cohérent
- * - isoDatePlus() / isoToDdMmYyyy() : utilitaires de dates pour générer des cas (J-1, J+1, etc.)
+ * - appointmentData.valid() : jeu de données “cas nominal” cohérent.
+ * - curaDatePlus(days) : date (J+N) au format CURA dd/mm/yyyy pour alimenter pickDateAsUser().
  */
 
 export const appointmentData = {

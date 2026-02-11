@@ -14,7 +14,7 @@ type PagesFixtures = {
 
 export const test = base.extend<PagesFixtures>({
   // Fournit un LoginPage (POM) lié à la page Playwright.
-  loginPage: async ({ page }: { page: Page }, use) => {
+  loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
   },
 
